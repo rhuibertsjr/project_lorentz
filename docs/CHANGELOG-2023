@@ -1,0 +1,13 @@
+20-10-2023  René Huiberts  <rhuibjr.business@gmail.com>
+
+	Added: Base logging system & win32 platform layer.
+
+	* platform/: platform api + includes.
+	* platform/win32: win32 platform layer.
+	* base/string: ascii string constructors.
+	* base/log: logging w/ formatting.
+
+18-10-2023  René Huiberts  <rhuibjr.business@gmail.com>
+
+	Initial commit
+
