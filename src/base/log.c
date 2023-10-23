@@ -1,9 +1,6 @@
 /* Copyright (C) 2023 René Huiberts 
    All rights reserved. */
 
-#include <stdio.h>
-#include <stdarg.h>
-
 const char *lrtz_log_table_type[] = {
   "ERROR", "WARNING", "INFO"};
 
@@ -17,6 +14,7 @@ const char *lrtz_log_table_tag[] = {
 internal void
 lrtz_log(LrtzLogTag tag, LrtzLogType type, String8 format, ...)
 {
+#if ENABLE_LOG
   va_list args_list;
   char message[LRTZ_LOG_MAX_MESSAGE_LENGTH];
 
@@ -26,6 +24,7 @@ lrtz_log(LrtzLogTag tag, LrtzLogType type, String8 format, ...)
 
   fprintf(stdout, "[DEBUG][%s] (%s) %s\n",
     lrtz_log_table_type[type], lrtz_log_table_tag[tag], message);
+#endif // ENABLE LOG
 
   return;
 }

@@ -26,14 +26,17 @@ enum LrtzLogTag
 internal void lrtz_log(LrtzLogTag tag, LrtzLogType type, String8 format, ...);
 
 //- rhjr: assertions
-#if !defined(LRTZ_ASSERT_BREAK)
-# define LRTZ_ASSERT_BREAK() (*(volatile int*)0 = 0)
+
+#include <stdio.h>
+
+#if !defined(AssertBreak)
+# define ASSERT_BREAK() (*(volatile int*)0 = 0)
 #endif
 
 #if LRTZ_ENABLE_ASSERT
 #  define LRTZ_ASSERT(c)                                                       \
 LRTZ_STATEMENT( if (!(c)) { lrtz_log(TAG_ASSERT, ERROR,                        \
-  str8_lit("%s"), #c); LRTZ_ASSERT_BREAK(); } )
+  str8_lit("%s"), #c); fflush(stdout); ASSERT_BREAK(); } )
 #else
 #  define LRTZ_ASSERT(c)
 #endif

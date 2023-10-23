@@ -13,8 +13,10 @@ struct String8
 
 //- rhjr: constructors
 
-internal String8 str8(u8 *string, u64 length);
-#define str8_lit(string) str8((u8*)(string), sizeof(string) - 1)
+internal String8 str8 (u8 *string, u64 length);
+
+#define str8_lit(string)                                                       \
+  str8((u8*)(string), sizeof(string) - 1)
 
 //- rhjr: helpers
 
