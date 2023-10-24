@@ -20,8 +20,6 @@
 #  define LRTZ_ARCH_X64 1
 #elif defined(_M_I86)
 #  define LRTZ_ARCH_X86 1
-#elif defined(_M_ARM)
-#  define LRTZ_ARCH_ARM 1
 #else
 #  error missing ARCH detection.
 # endif
@@ -68,6 +66,8 @@
 
 #include <stdint.h>
 
+typedef uintptr_t uptr64;
+
 typedef uint8_t  u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
@@ -81,7 +81,7 @@ typedef int64_t  i64;
 typedef float    r32;
 typedef double   r64;
 
-typedef _Bool   bool;
+typedef uint8_t  b8;
 
 #define true  1
 #define false 0

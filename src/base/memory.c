@@ -1,14 +1,6 @@
 /* Copyright (C) 2023 René Huiberts 
    All rights reserved. */
 
-//- rhjr: permanent storage
-
-void* m_reserve(u64 size)
-{
-  void* result = malloc(size);
-  return result;
-}
-
 //- rhjr: arena allocator
 
 internal Arena *
@@ -16,10 +8,12 @@ memory_arena_reserve (u64 size)
 {
   Arena *result = NULL;
 
-  void* ptr = m_reserve(size);
+  // rhjr: request memory from platform, and commit the initial memory.
+  void* ptr = platform_memory_reserve(size);
+  platform_memory_commit(ptr, sizeof(Arena));
 
   result = (Arena*) ptr;
-  result->memory = (u64*) ptr + sizeof(Arena);
+  result->memory = ptr;
   result->offset = 0 + sizeof(Arena);
   result->size = size - sizeof(Arena);
 
@@ -36,16 +30,22 @@ memory_arena_reserve_default ()
 internal void *
 memory_arena_alloc (Arena *arena, u64 size)
 {
-  void* result = NULL;
+  void *result;
+
+  size = memory_align_forward(size, MEMORY_ARENA_DEFAULT_ALIGNMENT);
 
   if (arena->offset + size <= arena->size)
   {
-    result = arena->memory + arena->offset;
+    // rhjr: make sure arena->offset is used as a pointer.
+    result = (void*)((uptr64) arena->memory + (uptr64) arena->offset);
     arena->offset += size;
+
+    // rhjr: mark memory as used/usable.
+    platform_memory_commit(result, size);
 
     memset(result, 0, size);
   }
-  
+
   LRTZ_ASSERT(result != NULL);
   return result;
 }
@@ -53,7 +53,27 @@ memory_arena_alloc (Arena *arena, u64 size)
 void
 memory_arena_free (Arena *arena)
 {
-  return;
+  platform_memory_release(arena, arena->size);
+}
+
+u64
+memory_align_forward (u64 ptr, u64 align)
+{
+  u64 result, offset, modulo;
+    
+	LRTZ_ASSERT(IS_POWER_OF_2(align));
+    
+	result = ptr;
+	offset = (u64) align;
+	modulo = result & (offset - 1);
+    
+	if (modulo != 0)
+  {
+    // rhjr: 'p' is not aligned, push the address to the next aligned value.
+		result += offset - modulo;
+	}
+
+	return result;
 }
 
 ArenaScratch
@@ -66,6 +86,7 @@ memory_begin_temp (Arena *arena)
 void
 memory_end_temp (ArenaScratch *arena)
 {
+  UNIMPLEMENTED("memory_end_temp()");
   arena->arena->offset = arena->offset;
   return;
 }
@@ -83,7 +104,7 @@ memory_get_scratch_pool(Arena **conflicting_arena, u32 count)
     LRTZ_ASSERT(MEMORY_ARENA_SCRATCH_POOL_COUNT <= 4); 
     Arena **slot = _memory_scratch_pool;
     for (
-      u8 index = 0; index < MEMORY_ARENA_SCRATCH_POOL_COUNT; index++, slot += 1)
+    u8 index = 0; index < MEMORY_ARENA_SCRATCH_POOL_COUNT; index++, slot += 1)
     {
       *slot = memory_arena_reserve_default();
     }
@@ -94,10 +115,10 @@ memory_get_scratch_pool(Arena **conflicting_arena, u32 count)
   Arena **slot = _memory_scratch_pool;
 
   for (
-    u8 index = 0; index < MEMORY_ARENA_SCRATCH_POOL_COUNT; index++, slot += 1)
+  u8 index = 0; index < MEMORY_ARENA_SCRATCH_POOL_COUNT; index++, slot += 1)
   {
     Arena **conflict_ptr = conflicting_arena;
-    bool is_non_conflict = true;
+    b8 is_non_conflict = true;
 
     for (u32 jndex = 0; jndex < count; jndex++, conflict_ptr += 1)
     {

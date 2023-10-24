@@ -1,3 +1,17 @@
+23-10-2023  René Huiberts  <rhuibjr.business@gmail.com>
+
+	Fixed: Memory not aligning in the arena allocator.
+
+	* base/memory.c: Memory alignment functions.
+	* base/memory.h: Arena helper macros.
+
+23-10-2023  René Huiberts  <rhuibjr.business@gmail.com>
+
+	Added: Arena allocator, Arena scratch pooling.
+
+	* base/memory.c: Arena and Arena scratch implementation.
+	* base/memory.h: Arena and Arena scratch api.
+
 20-10-2023  René Huiberts  <rhuibjr.business@gmail.com>
 
 	Added: Base logging system & win32 platform layer.

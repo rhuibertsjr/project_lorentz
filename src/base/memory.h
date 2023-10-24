@@ -12,7 +12,9 @@
 
 //- rhjr: arena
 #define MEMORY_ARENA_SCRATCH_POOL_COUNT  0x4
+
 #define MEMORY_ARENA_DEFAULT_COMMIT_SIZE MB(1)
+#define MEMORY_ARENA_DEFAULT_ALIGNMENT sizeof(void*)
 
 typedef struct Arena Arena;
 struct Arena
@@ -30,18 +32,25 @@ struct ArenaScratch
 };
 
 // rhjr: constructor
-Arena *      memory_arena_reserve         (u64 size);
-Arena *      memory_arena_reserve_default ();
+Arena * memory_arena_reserve (u64 size);
+
+Arena * memory_arena_reserve_default ();
 
 // rhjr: allocator
-void  *      memory_arena_alloc           (Arena *arena, u64 size);
+void * memory_arena_alloc (Arena *arena, u64 size);
+#define arena_alloc(arena, type, amount)                                       \
+  memory_arena_alloc((arena), sizeof(type) * (amount))
 
 // rhjr: release
-void         memory_arena_free            (Arena *arena);
+void memory_arena_free (Arena *arena);
+
+// rhjr: helpers
+u64 memory_align_forward (u64 ptr, u64 align);
+#define IS_POWER_OF_2(x) (((uptr64)x & (((uptr64) x) -1 )) == 0)
 
 // rhjr: temporary
-ArenaScratch memory_begin_temp            (Arena *arena);
-void         memory_end_temp              (ArenaScratch *arena);
+ArenaScratch memory_begin_temp (Arena *arena);
+void memory_end_temp (ArenaScratch *arena);
 
 //- rhjr: scratch memory
 
