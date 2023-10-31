@@ -1,6 +1,8 @@
 /* Copyright (C) 2023 René Huiberts 
    All rights reserved. */
 
+#include <string.h>
+
 //- rhjr: arena allocator
 
 internal Arena *
@@ -17,14 +19,14 @@ memory_arena_reserve (u64 size)
   result->offset = 0 + sizeof(Arena);
   result->size = size - sizeof(Arena);
 
-  LRTZ_ASSERT(result != NULL);
+  assert(result != 0, "Couldn't reserve memory from the Operating system");
   return result;
 }
 
 internal Arena *
 memory_arena_reserve_default ()
 {
-  return memory_arena_reserve(MB(1));
+  return memory_arena_reserve(mb(1));
 }
 
 internal void *
@@ -37,7 +39,7 @@ memory_arena_alloc (Arena *arena, u64 size)
   if (arena->offset + size <= arena->size)
   {
     // rhjr: make sure arena->offset is used as a pointer.
-    result = (void*)((uptr64) arena->memory + (uptr64) arena->offset);
+    result = (void*)((ptr64) arena->memory + (ptr64) arena->offset);
     arena->offset += size;
 
     // rhjr: mark memory as used/usable.
@@ -46,7 +48,7 @@ memory_arena_alloc (Arena *arena, u64 size)
     memset(result, 0, size);
   }
 
-  LRTZ_ASSERT(result != NULL);
+  assert(result != 0, "Arena is out of space.");
   return result;
 }
 
@@ -60,8 +62,6 @@ u64
 memory_align_forward (u64 ptr, u64 align)
 {
   u64 result, offset, modulo;
-    
-	LRTZ_ASSERT(IS_POWER_OF_2(align));
     
 	result = ptr;
 	offset = (u64) align;
@@ -86,7 +86,6 @@ memory_begin_temp (Arena *arena)
 void
 memory_end_temp (ArenaScratch *arena)
 {
-  UNIMPLEMENTED("memory_end_temp()");
   arena->arena->offset = arena->offset;
   return;
 }
@@ -101,7 +100,8 @@ memory_get_scratch_pool(Arena **conflicting_arena, u32 count)
   // rhjr: initialization (first time called).
   if (_memory_scratch_pool[0] == 0)
   {
-    LRTZ_ASSERT(MEMORY_ARENA_SCRATCH_POOL_COUNT <= 4); 
+    assert(
+      MEMORY_ARENA_SCRATCH_POOL_COUNT <= 4, "Exceeded max amount of arenas"); 
     Arena **slot = _memory_scratch_pool;
     for (
     u8 index = 0; index < MEMORY_ARENA_SCRATCH_POOL_COUNT; index++, slot += 1)
@@ -115,7 +115,7 @@ memory_get_scratch_pool(Arena **conflicting_arena, u32 count)
   Arena **slot = _memory_scratch_pool;
 
   for (
-  u8 index = 0; index < MEMORY_ARENA_SCRATCH_POOL_COUNT; index++, slot += 1)
+    u8 index = 0; index < MEMORY_ARENA_SCRATCH_POOL_COUNT; index++, slot += 1)
   {
     Arena **conflict_ptr = conflicting_arena;
     b8 is_non_conflict = true;
@@ -142,3 +142,4 @@ memory_get_scratch_pool(Arena **conflicting_arena, u32 count)
   
 }
 
+// internal_memory.c ends here.

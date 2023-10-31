@@ -2,6 +2,6 @@
 
 pushd "P:\lorentz\bin\"
 
-main.exe
+lorentz.exe
 
 popd "P:\lorentz\bin\"

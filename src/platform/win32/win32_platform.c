@@ -2,10 +2,14 @@
    All rights reserved. */
 
 //- rhjr: lorentz application entry
+
 internal void
-lrtz_os_init(int argc, char **argv)
+platform_os_init(int argc, char **argv)
 {
-  lrtz_log(TAG_PLATFORM, INFO, str8_lit("Initializing win32 platform."));
+  INTERNAL_UNUSED(argc);
+  INTERNAL_UNUSED(argv);
+
+  log(TAG_PLATFORM, INFO, "Initializing win32 platform.");
 }
 
 //- rhjr: lorentz application memory
@@ -33,3 +37,5 @@ platform_memory_release (void *ptr, u64 size)
 {
   VirtualFree(ptr, size, MEM_RELEASE);
 }
+
+// win32_platform.c ends here.

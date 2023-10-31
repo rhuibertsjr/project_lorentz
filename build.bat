@@ -2,11 +2,16 @@
 
 if not exist "P:\lorentz\bin\" mkdir "P:\lorentz\bin\"
 
+set CC=gcc
+
+set CFLAGS=-std=c11 -Wall -Wextra -Werror -g -Wno-unused-function
+set LDFLAGS=-luser32 -lkernel32 -lgdi32
+
+set OPTS=-DINTERNAL_ASSERT=1 -DINTERNAL_DEBUG_ASSERT=1 -DINTERNAL_LOGGING=1 ^
+         -DINTERNAL_PLATFORM_WINDOWS
+
 pushd "P:\lorentz\bin\"
 
-set ldflags= user32.lib kernel32.lib gdi32.lib
-set opts=    -DLRTZ_ENABLE_ASSERT=1 -DENABLE_LOG=1
-
-cl -Zi %opts% ..\src\main.c /link %ldflags% 
+%CC% %CFLAGS% %OPTS% ..\src\lorentz.c -o lorentz.exe %LDFLAGS%
 
 popd "P:\lorentz\bin\"

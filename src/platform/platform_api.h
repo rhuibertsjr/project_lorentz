@@ -1,14 +1,16 @@
 /* Copyright (C) 2023 René Huiberts 
    All rights reserved. */
 
-#ifndef LORENTZ_OS_API_H
-#define LORENTZ_OS_API_H
+#pragma once
 
-//- rhjr: os initialize
+#ifndef PLATFORM_API_H
+#define PLATFORM_API_H
 
-internal void lrtz_os_init(int argc, char **argv);
+//- rhjr: platform initialize
 
-//- rhjr: os memory
+internal void platform_os_init(int argc, char **argv);
+
+//- rhjr: platform memory
 
 internal void * platform_memory_reserve  (u64 size);
 internal b8     platform_memory_commit   (void *ptr, u64 size);
@@ -16,6 +18,11 @@ internal b8     platform_memory_commit   (void *ptr, u64 size);
 internal void   platform_memory_decommit (void *ptr, u64 size);
 internal void   platform_memory_release  (void *ptr, u64 size);
 
-#endif // LORENTZ_OS_API_H 
-// os_api.h ends here.
+//- rhjr: platform I/O
+
+internal u8str platform_file_read  ();  
+internal u8str platform_file_write ();  
+
+#endif // PLATFORM_API_H 
+// platform_api.h ends here.
 

@@ -1,4 +1,11 @@
-23-10-2023  René Huiberts  <rhuibjr.business@gmail.com>
+31-10-2023  René Huiberts  <rhuibjr.business@gmail.com>
+
+	Refactor: base -> internal.
+
+	* base/: Decided I wanted to use another convention.
+	* platform/: Also performed refactor here.
+
+24-10-2023  René Huiberts  <rhuibjr.business@gmail.com>
 
 	Fixed: Memory not aligning in the arena allocator.
 
