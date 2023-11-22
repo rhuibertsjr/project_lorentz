@@ -1,18 +1,18 @@
 /* Copyright (C) 2023 René Huiberts 
    All rights reserved. */
 
-//- rhjr: lorentz application entry
+//= rhjr: application entry
 
 internal void
 platform_os_init(int argc, char **argv)
 {
-  INTERNAL_UNUSED(argc);
-  INTERNAL_UNUSED(argv);
+  UNUSED(argc);
+  UNUSED(argv);
 
   log(TAG_PLATFORM, INFO, "Initializing win32 platform.");
 }
 
-//- rhjr: lorentz application memory
+//= rhjr: application memory
 
 internal void *
 platform_memory_reserve (u64 size)

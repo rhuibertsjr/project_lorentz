@@ -6,12 +6,14 @@
 #ifndef INTERNAL_MEMORY_H
 #define INTERNAL_MEMORY_H
 
-//- rhjr: arena
+//= rhjr: arena allocator
 
 #define MEMORY_ARENA_SCRATCH_POOL_COUNT  0x4
 
 #define MEMORY_ARENA_DEFAULT_COMMIT_SIZE mb(1)
 #define MEMORY_ARENA_DEFAULT_ALIGNMENT sizeof(void*)
+
+//- rhjr: arena types
 
 typedef struct Arena Arena;
 struct Arena
@@ -27,6 +29,8 @@ struct ArenaScratch
   Arena *arena;
   u64 offset;
 };
+
+//- rhjr: arena api
 
 // rhjr: constructor
 internal Arena * memory_arena_reserve (u64 size);
@@ -48,7 +52,7 @@ internal u64 memory_align_forward (u64 ptr, u64 align);
 internal ArenaScratch memory_begin_temp (Arena *arena);
 internal void memory_end_temp (ArenaScratch *arena);
 
-//- rhjr: scratch memory
+//= rhjr: scratch memory
 
 internal ArenaScratch
   memory_get_scratch_pool(Arena **conflicting_arena, u32 count);

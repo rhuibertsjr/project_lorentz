@@ -3,7 +3,7 @@
 
 #include <string.h>
 
-//- rhjr: arena allocator
+//= rhjr: arena allocator
 
 internal Arena *
 memory_arena_reserve (u64 size)
@@ -90,14 +90,14 @@ memory_end_temp (ArenaScratch *arena)
   return;
 }
 
-//- rhjr: scratch memory
+//= rhjr: scratch memory
 
 thread_local Arena *_memory_scratch_pool[MEMORY_ARENA_SCRATCH_POOL_COUNT];
 
 internal ArenaScratch
 memory_get_scratch_pool(Arena **conflicting_arena, u32 count)
 {
-  // rhjr: initialization (first time called).
+  //- rhjr: initialization
   if (_memory_scratch_pool[0] == 0)
   {
     assert(
@@ -110,7 +110,7 @@ memory_get_scratch_pool(Arena **conflicting_arena, u32 count)
     }
   }
 
-  // rhjr: prevent conflict in scratch pool arena's
+  //- rhjr: creating non-conflicting arena
   ArenaScratch result = {0};
   Arena **slot = _memory_scratch_pool;
 

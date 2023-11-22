@@ -1,7 +1,7 @@
 /* Copyright (C) 2023 René Huiberts 
    All rights reserved. */
 
-//- rhjr: constructors
+//= rhjr: constructors
 
 internal u8str 
   u8str_init(u8 *cstring, u64 length)

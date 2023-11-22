@@ -10,10 +10,6 @@
 int main(int argc, char *argv[])
 {
   platform_os_init(argc, argv);
-
-  Arena *permanent_storage = memory_arena_reserve_default();
-  INTERNAL_UNUSED(permanent_storage);
-
   return 0;
 }
 

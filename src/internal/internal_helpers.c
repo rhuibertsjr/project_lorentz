@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//- rhjr: application logs
+//= rhjr: application logs
 
 internal void
 _internal_stdout_log(
@@ -17,11 +17,11 @@ _internal_stdout_log(
   vsnprintf(message, 1024, format, args_list);
   va_end(args_list);
 
-  fprintf(stdout, "[%s] (%s) %s\n",
+  fprintf(stdout, "[DEBUG][%s] (%s) %s\n",
     _internal_log_table_type[type], _internal_log_table_tag[tag], message);
 }
 
-//- rhjr: abort & assertion
+//= rhjr: abort & assertion
 
 internal _Noreturn ptr64
 _internal_assert (
@@ -29,6 +29,7 @@ _internal_assert (
 {
   _internal_stdout_log(
     TAG_ASSERT, ERROR, "\"%s\" at %s::%d: %s", condition, file, line, message);
+  fflush(stdout);
   abort();
 }
 

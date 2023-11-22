@@ -6,7 +6,7 @@
 #ifndef INTERNAL_CORE_H
 #define INTERNAL_CORE_H
 
-//- rhjr: contexts
+//= rhjr: contexts
 
 #ifdef INTERNAL_PLATFORM_WINDOWS
 # define INTERNAL_PLATFORM_WINDOWS 1
@@ -20,7 +20,7 @@
 # define INTERNAL_PLATFORM_GNU_LINUX 0
 #endif
 
-//- rhjr: types
+//= rhjr: types
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -42,14 +42,6 @@ typedef uint8_t   b8;
 
 typedef uintptr_t ptr64;
 
-#ifndef true
-# define true 1
-#endif
-
-#ifndef false
-# define true 1
-#endif
-
 #define kb(x) ((x) << 10)
 #define mb(x) ((x) << 20)
 #define gb(x) ((x) << 30)
@@ -58,7 +50,7 @@ typedef uintptr_t ptr64;
 #define internal     static
 #define thread_local __thread
 
-//- rhjr: compound types
+//= rhjr: compound types
 
 typedef union i32x2 i32x2;
 union i32x2
@@ -84,7 +76,7 @@ union r32x2
   r32 v[2];
 };
 
-//- rhjr: modules
+//= rhjr: modules
 
 #include "internal_helpers.h"
 #include "internal_memory.h"

@@ -6,7 +6,7 @@
 #ifndef INTERNAL_STRING_H
 #define INTERNAL_STRING_H
 
-//- rhjr string types
+//= rhjr string types
 
 typedef struct u8str u8str;
 struct u8str
@@ -22,7 +22,7 @@ struct u16str
   u64 length; 
 };
 
-//- rhjr: constructors
+//= rhjr: constructors
 
 internal u8str u8str_init(u8 *string, u64 length);
 #define u8str_lit(string) u8str_init((u8str*)(string), sizeof(string) - 1)
